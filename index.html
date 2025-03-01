@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tartini Database</title>
+    <meta name="description" content="Database interface for the project Tartinians in Europe">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Navbar</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./form.html">Add Data</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./edit_data.html">Edit Data</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="https://docs.google.com/spreadsheets/d/1dptSbO5-91AtTHYVFBuLCI1tO3Q_HyPKsPuDRkk2Qyc/edit?usp=sharing">View Data</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <main>
+        <div class="container mt-5">
+            <h3>Tartinians in Europe</h3>
+        </div>
+        <div class="container mt-5">
+            <p>Test for interface adding data to a backend Google Spreadsheet (or multiple spreadsheets)</p>
+        </div>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col">
+                    <a href="form.html" class="btn btn-primary btn-lg">Add Data</a>
+                </div>
+                <div class="col">
+                    <a href="https://docs.google.com/spreadsheets/d/1dptSbO5-91AtTHYVFBuLCI1tO3Q_HyPKsPuDRkk2Qyc/edit?usp=sharing" 
+                       class="btn btn-primary btn-lg" target="_blank">View Data</a>
+                </div>
+                <div class="col">
+                    <a href="edit_data.html" class="btn btn-primary btn-lg">Edit Data</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container mt-5" id="footer-text">
+            Quick test: last updated <span id="date"></span>
+        </div>
+    </footer>
+
+    <script>
+        const newDate = new Date();
+        const date = newDate.getDate();
+        const month = newDate.getMonth() + 1;
+        const year = newDate.getFullYear();
+        document.getElementById('date').textContent = `${date}-${month}-${year}`;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
