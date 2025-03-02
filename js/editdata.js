@@ -7,7 +7,7 @@ document.getElementById("fetchDataBtn").addEventListener("click", function () {
         return;
     }
 
-    fetch("https://script.google.com/macros/s/AKfycbw7wictY58GpEnBkQeYprT1-CF_ghWpVAG5mrSblVV1uaTiRs-TUbGscUWDmf6mhXmp/exec?action=get&name=" + encodeURIComponent(name),
+    fetch("https://script.google.com/macros/s/AKfycbyyBx9jeumHTpvKeubGhNlyGyjhufI88F9GJF4F4vK6g-qkz5FWgFXO5yCQ10Ex8Byp/exec?action=get&name=" + encodeURIComponent(name),
     { method: "GET" }  
     )
         .then(response => response.json())
@@ -51,7 +51,7 @@ document.getElementById("editForm").addEventListener("submit", function (e) {
         reference: document.getElementById("reference").value
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbw7wictY58GpEnBkQeYprT1-CF_ghWpVAG5mrSblVV1uaTiRs-TUbGscUWDmf6mhXmp/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbyyBx9jeumHTpvKeubGhNlyGyjhufI88F9GJF4F4vK6g-qkz5FWgFXO5yCQ10Ex8Byp/exec", {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },

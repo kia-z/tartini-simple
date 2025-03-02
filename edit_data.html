@@ -24,7 +24,7 @@
                     <a class="nav-link" href="form.html">Add Data</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="https://docs.google.com/spreadsheets/d/1dptSbO5-91AtTHYVFBuLCI1tO3Q_HyPKsPuDRkk2Qyc/edit?usp=sharing" target="_blank">View Data</a>
+                    <a class="nav-link" href="./view_mask.html">View Data</a>
                   </li>
                 </ul>
               </div>
@@ -44,9 +44,8 @@
             <!-- Fetch Data Section -->
             <label for="name">Enter Name to Edit:</label>
             <input type="text" id="name" required>
-            <button type="button" id="fetchDataBtn">Fetch Data</button>
+            <button type="button" class="btn btn-secondary" id="fetchDataBtn">Fetch Data</button>
         
-
             <form id="editForm">                
                 <div class="mb-3">
                     <label for="researcher" class="form-label">Who is adding this data? (Researcher Name)</label>
@@ -119,14 +118,12 @@
                 <p id="responseMessage"></p>
             </form>
         </div>
-        <div class="container mt-3">
-            <p>In case of issues, contact: chiara-zuanni@uni-graz.at</p>
-        </div>
     </main>
     
     <footer>
         <div class="container mt-5" id="footer-text">
-            Today's date <span id="date"></span>
+            <p>Test for Tartini "database" interface</p>
+            <p>In case of issues, contact: chiara-zuanni@uni-graz.at</p>
         </div>
     </footer>
     
