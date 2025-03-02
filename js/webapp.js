@@ -1,9 +1,3 @@
-const newDate = new Date();
-        const date = newDate.getDate();
-        const month = newDate.getMonth() + 1;
-        const year = newDate.getFullYear();
-        document.getElementById('date').textContent = `${date}-${month}-${year}`;
-
 document.getElementById("dataForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
