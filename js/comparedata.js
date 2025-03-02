@@ -5,7 +5,7 @@ document.getElementById("fetchDataButtonCompareFirst").addEventListener("click",
         alert("Please enter a name to fetch data.");
         return;
     }
-    fetch("https://script.google.com/macros/s/AKfycbz40solZlowPtOiRW9CBCK3nYZbjbU7M5d9AJ9hta3CbLYEaQ2WvHG0VzvfOppitWVq/exec?action=get&name=" + encodeURIComponent(name),
+    fetch("https://script.google.com/macros/s/AKfycbyJFAZQxACQvuEf6ftM5uvv6S8xlQKdDDGD5O2EpkEe3_W8cw-dBl_impHGKy-_FJAJ/exec?action=get&name=" + encodeURIComponent(name),
     { method: "GET" }  
     )
         .then(response => response.json())
@@ -36,7 +36,7 @@ document.getElementById("fetchDataButtonCompareSecond").addEventListener("click"
         alert("Please enter a name to fetch data.");
         return;
     }
-    fetch("https://script.google.com/macros/s/AKfycbz40solZlowPtOiRW9CBCK3nYZbjbU7M5d9AJ9hta3CbLYEaQ2WvHG0VzvfOppitWVq/exec?action=get&name=" + encodeURIComponent(name),
+    fetch("https://script.google.com/macros/s/AKfycbyJFAZQxACQvuEf6ftM5uvv6S8xlQKdDDGD5O2EpkEe3_W8cw-dBl_impHGKy-_FJAJ/exec?action=get&name=" + encodeURIComponent(name),
     { method: "GET" }  
     )
         .then(response => response.json())
