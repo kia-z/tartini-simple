@@ -58,9 +58,9 @@ document.getElementById("editForm").addEventListener("submit", function (e) {
         body: JSON.stringify(formData),
     })
     .then(() => {
-        document.getElementById("responseMessage").innerText = "Data updated successfully!";
+        document.getElementById("responseMessageEdit").innerText = "Data updated successfully!";
     })
     .catch(() => {
-        document.getElementById("responseMessage").innerText = "Error updating data.";
+        document.getElementById("responseMessageEdit").innerText = "Error updating data.";
     });
 });

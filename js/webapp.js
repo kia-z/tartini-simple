@@ -29,10 +29,10 @@ document.getElementById("dataForm").addEventListener("submit", function (e) {
         body: JSON.stringify(formData),
     })
     .then(() => {
-        document.getElementById("responseMessage").innerText = "Data submitted successfully!";
+        document.getElementById("responseMessageAdd").innerText = "Data submitted successfully!";
         document.getElementById("dataForm").reset();
     })
     .catch(() => {
-        document.getElementById("responseMessage").innerText = "Error submitting data.";
+        document.getElementById("responseMessageAdd").innerText = "Error submitting data.";
     });
 });
