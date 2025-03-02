@@ -1,10 +1,11 @@
 function createGrid() {
-    fetch("https://script.google.com/macros/s/AKfycbyyBx9jeumHTpvKeubGhNlyGyjhufI88F9GJF4F4vK6g-qkz5FWgFXO5yCQ10Ex8Byp/exec", { 
-        method: "GET"
+    fetch("https://script.google.com/macros/s/AKfycbz40solZlowPtOiRW9CBCK3nYZbjbU7M5d9AJ9hta3CbLYEaQ2WvHG0VzvfOppitWVq/exec", { 
+        method: "GET",
+        mode: "no-cors",
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
+                throw new Error('Network response was not ok ' + response.type);
             }
             return response.json();
         })
