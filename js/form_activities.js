@@ -15,7 +15,7 @@ document.getElementById("activities_form").addEventListener("submit", function (
         sources: document.getElementById("sources").value,
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbyEzOA4r-ReJaySgx-FJhQAm4fxKtKlrhKWSzzrJNvkmuD8Suc4YO2YbeYa9uoOJUZGCw/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbxdrGjEONP9yLAXZN-qtX6ELfEbFMC6zq8GPZ6pzqbM03lq6Cth73w5d1emk22rMP_Hcw/exec", {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
