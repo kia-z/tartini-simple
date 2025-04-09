@@ -3,7 +3,7 @@ document.getElementById("people_form").addEventListener("submit", function (e) {
 
     // remember! the first name is the one in google spreadsheet, the second one is the ID in the html form
     const formPeople = {
-        action: "add", 
+        action: "addPeople", 
         name: document.getElementById("person_name").value,
         alternative_names: document.getElementById("person_altName").value,
         identifiers: document.getElementById("person_ids").value,
