@@ -133,7 +133,7 @@ const entityFields = {
   
           section.dataset.entity = entity;
   
-          // 🔥 Load suggestions dynamically
+          // Load suggestions dynamically
           loadSuggestionsForEntity(entity);
         });
       }
@@ -141,7 +141,7 @@ const entityFields = {
 
 // fetch data for datalist
 function loadSuggestionsForEntity(entity) {
-  fetch(`https://script.google.com/macros/s/AKfycbzW2f3FNvchuLl6sGhTF5mEu1mLWJZHI5qDjfuAhN8LUTcaCVbpKGz37EtajUJSoUbAKg/exec?action=get_list&entity=${entity}`, {
+  fetch(`https://script.google.com/macros/s/AKfycbz7QniyposSC7M4rhpzLHnpihg9o_JmlZY7euqPJsIVtlPyMKzI4VbQCD419uIw9HRazQ/exec?action=get_list&entity=${entity}`, {
     method: "GET"
 })
     .then(res => res.json())
@@ -157,6 +157,24 @@ function loadSuggestionsForEntity(entity) {
     .catch(err => console.error("Suggestion loading error:", err));
 }
 
+// fetch data for place-related fields  
+function loadSuggestionsForPlaceField(field, datalist) {
+  fetch(`https://script.google.com/macros/s/AKfycbz7QniyposSC7M4rhpzLHnpihg9o_JmlZY7euqPJsIVtlPyMKzI4VbQCD419uIw9HRazQ/exec?action=get_suggestions&field=place_name`, {
+      method: "GET"
+  })
+  .then(res => res.json())
+    .then(values => {
+      console.log("Fetched place suggestions:", values); // Debugging line
+      datalist.innerHTML = ""; // Clear old entries
+      values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        datalist.appendChild(option);
+      });
+    })
+    .catch(err => console.error("Suggestion loading error:", err));
+}
+         
   // fetch data for the selected entity type
   document.getElementById("fetch_for_me").addEventListener("click", function () {
     const name = document.getElementById("entity_search_input").value.trim();
@@ -182,7 +200,7 @@ function fetchEntityData(entity, name) {
         return;
     }
 
-    fetch(`https://script.google.com/macros/s/AKfycbzW2f3FNvchuLl6sGhTF5mEu1mLWJZHI5qDjfuAhN8LUTcaCVbpKGz37EtajUJSoUbAKg/exec?action=get&${queryParam}=${encodeURIComponent(name)}`, {
+    fetch(`https://script.google.com/macros/s/AKfycbz7QniyposSC7M4rhpzLHnpihg9o_JmlZY7euqPJsIVtlPyMKzI4VbQCD419uIw9HRazQ/exec?action=get&${queryParam}=${encodeURIComponent(name)}`, {
         method: "GET"
     })
         .then(response => response.json())
@@ -237,17 +255,14 @@ function fetchEntityData(entity, name) {
     tableSection.style.display = "block";
   }
   
-  // render form fields for all entities
+  // render form fields for selected entity 
   function renderFormFields(entity) {
     const formContainer = document.getElementById("form_fields");
-
     if (!formContainer) {
         console.error("Form container not found in the DOM.");
         return;
     }
-
     console.log("Rendering form fields for entity:", entity);
-
     formContainer.innerHTML = "";
 
     entityFields[entity].forEach(field => {
@@ -265,6 +280,28 @@ function fetchEntityData(entity, name) {
         input.className = "form-control";
         input.id = field;
         input.name = field;
+        input.placeholder = field.includes("date") ? "DD-MM-YYYY" : "";
+
+        if (field.includes("date")) {
+          const feedback = document.createElement("div");
+          feedback.className = "invalid-feedback";
+          feedback.innerText = "Please enter a valid date (DD-MM-YYYY).";
+          div.appendChild(feedback);
+      }
+
+ // Add a datalist for place-related fields (e.g., death_place)
+ if (["person_birth_place", "person_death_place", "activity_place", "work_place"].includes(field)) {
+  const datalistId = `${field}_datalist`;
+  input.setAttribute("list", datalistId);
+  input.placeholder = "Start typing a place...";
+
+  const datalist = document.createElement("datalist");
+  datalist.id = datalistId;
+
+  // Dynamically populate the datalist
+  loadSuggestionsForPlaceField(field, datalist);
+  div.appendChild(datalist);
+}    
 
         div.appendChild(label);
         div.appendChild(input);
@@ -294,6 +331,30 @@ function fetchEntityData(entity, name) {
     });
   }
   
+  function isValidDate(input) {
+    const fullDateRegex = /^\d{2}-\d{2}-\d{4}$/; // DD-MM-YYYY
+    const yearMonthRegex = /^\d{2}-\d{4}$/; // MM-YYYY
+    const yearOnlyRegex = /^\d{4}$/; // YYYY
+
+    if (fullDateRegex.test(input)) {
+        const [day, month, year] = input.split("-").map(Number);
+        const date = new Date(year, month - 1, day);
+        return (
+            date.getFullYear() === year &&
+            date.getMonth() === month - 1 &&
+            date.getDate() === day
+        );
+    } else if (yearMonthRegex.test(input)) {
+        const [month, year] = input.split("-").map(Number);
+        return month >= 1 && month <= 12 && year > 0;
+    } else if (yearOnlyRegex.test(input)) {
+        const year = Number(input);
+        return year > 0;
+    }
+
+    return false; // Invalid format
+}
+  
 
 function setupDynamicButton(mode, entity) {
     const dynamicBtn = document.getElementById("dynamic_btn");
@@ -308,18 +369,43 @@ function setupDynamicButton(mode, entity) {
     dynamicBtn.innerText = "Submit";
 
     dynamicBtn.onclick = function () {
+        let valid = true;
         const payload = {
             action: mode === "edit" ? "edit" + pluralEntities[entity] : "add" + pluralEntities[entity]
         };
         entityFields[entity].forEach(field => {
             const el = document.getElementById(field);
-            if (el) payload[field] = el.value;
+            if (el) {
+                payload[field] = el.value;
+
+                // Validate date fields
+                if (field.includes("date") && el.value.trim() !== "") {
+                    if (!isValidDate(el.value.trim())) {
+                        el.classList.add("is-invalid");
+                        valid = false;
+                    } else {
+                        el.classList.remove("is-invalid");
+
+                        // Check for partial dates and confirm with the user
+                        const isPartialDate = /^\d{4}$/.test(el.value.trim()) || /^\d{2}-\d{4}$/.test(el.value.trim());
+                        if (isPartialDate) {
+                            const confirmPartial = confirm(`The date "${el.value}" is incomplete. Do you want to proceed?`);
+                            if (!confirmPartial) {
+                                valid = false;
+                            }
+                        }
+                    }
+                }
+            }
         });
         console.log("Payload:", payload);
 
-        if (!confirm(`Are you sure you want to ${mode} this record?`)) return;
+        if (!valid) {
+          alert("Please correct invalid date fields (use DD-MM-YYYY format).");
+          return;
+        } else if (!confirm(`Are you sure you want to ${mode} this record?`)) return;
 
-        fetch("https://script.google.com/macros/s/AKfycbzW2f3FNvchuLl6sGhTF5mEu1mLWJZHI5qDjfuAhN8LUTcaCVbpKGz37EtajUJSoUbAKg/exec", {
+        fetch("https://script.google.com/macros/s/AKfycbz7QniyposSC7M4rhpzLHnpihg9o_JmlZY7euqPJsIVtlPyMKzI4VbQCD419uIw9HRazQ/exec", {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
