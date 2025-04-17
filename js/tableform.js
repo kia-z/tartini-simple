@@ -91,10 +91,75 @@ const entityFields = {
     place: "Places"
   };
 
+  const entityButtons = {
+    person: {
+      heading: "Check if this person already exists",
+      description: "Enter the name of the pupil/musician...",
+      label: "Enter Name to Fetch:",
+      placeholder: "e.g. Giuseppe Tartini"
+    },
+    activity: {
+      heading: "Check if this activity already exists",
+      description: "Enter the name or description of the activity...",
+      label: "Enter Activity Name:",
+      placeholder: "e.g. Studied in Padua"
+    },
+    work: {
+      heading: "Check if this work already exists",
+      description: "Enter the title or short description of the work...",
+      label: "Enter Work Title:",
+      placeholder: "e.g. Sonata in G Major"
+    },
+    place: {
+      heading: "Check if this place already exists",
+      description: "Enter the name of the place to look up or add.",
+      label: "Enter Place Name:",
+      placeholder: "e.g. Venice"
+    }
+  };
+  
+    Object.keys(entityButtons).forEach(entity => {
+      const button = document.getElementById(entity);
+      if (button) {
+        button.addEventListener("click", () => {
+          const section = document.getElementById("fetch_section");
+          section.style.display = "block";
+  
+          // Update content dynamically
+          document.getElementById("step2_heading").textContent = entityButtons[entity].heading;
+          document.getElementById("step2_description").textContent = entityButtons[entity].description;
+          document.getElementById("search_label").textContent = entityButtons[entity].label;
+          document.getElementById("entity_search_input").placeholder = entityButtons[entity].placeholder;
+  
+          section.dataset.entity = entity;
+  
+          // 🔥 Load suggestions dynamically
+          loadSuggestionsForEntity(entity);
+        });
+      }
+    });
+
+// fetch data for datalist
+function loadSuggestionsForEntity(entity) {
+  fetch(`https://script.google.com/macros/s/AKfycbzW2f3FNvchuLl6sGhTF5mEu1mLWJZHI5qDjfuAhN8LUTcaCVbpKGz37EtajUJSoUbAKg/exec?action=get_list&entity=${entity}`, {
+    method: "GET"
+})
+    .then(res => res.json())
+    .then(values => {
+      const datalist = document.getElementById("dynamicSuggestions");
+      datalist.innerHTML = ""; // Clear old entries
+      values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        datalist.appendChild(option);
+      });
+    })
+    .catch(err => console.error("Suggestion loading error:", err));
+}
 
   // fetch data for the selected entity type
   document.getElementById("fetch_for_me").addEventListener("click", function () {
-    const name = document.getElementById("my_search").value.trim();
+    const name = document.getElementById("entity_search_input").value.trim();
     const entity = document.getElementById("fetch_section").dataset.entity;
 
     if (!name || !entity) {
@@ -117,7 +182,7 @@ function fetchEntityData(entity, name) {
         return;
     }
 
-    fetch(`https://script.google.com/macros/s/AKfycbzRowr7Of6C-uNT75rHKGAv6Gbo1StSOOaorWxnmhbjnp2-empw5HuF-TozxbmHqywCaQ/exec?action=get&${queryParam}=${encodeURIComponent(name)}`, {
+    fetch(`https://script.google.com/macros/s/AKfycbzW2f3FNvchuLl6sGhTF5mEu1mLWJZHI5qDjfuAhN8LUTcaCVbpKGz37EtajUJSoUbAKg/exec?action=get&${queryParam}=${encodeURIComponent(name)}`, {
         method: "GET"
     })
         .then(response => response.json())
@@ -254,7 +319,7 @@ function setupDynamicButton(mode, entity) {
 
         if (!confirm(`Are you sure you want to ${mode} this record?`)) return;
 
-        fetch("https://script.google.com/macros/s/AKfycbzRowr7Of6C-uNT75rHKGAv6Gbo1StSOOaorWxnmhbjnp2-empw5HuF-TozxbmHqywCaQ/exec", {
+        fetch("https://script.google.com/macros/s/AKfycbzW2f3FNvchuLl6sGhTF5mEu1mLWJZHI5qDjfuAhN8LUTcaCVbpKGz37EtajUJSoUbAKg/exec", {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },

@@ -20,6 +20,9 @@
 
     <main>
         <div class="container mt-5">
+            <h1>OPEN QUESTIONS</h1>
+            <h4>Select existing data</h4>
+            <p> should we use a library like <a href="https://choices-js.github.io/Choices/">choices.js</a>for supporting filling in and validation? (currently, I'm using a datalist)</p>
             <h1>Documentation</h1>
         <!-- 
         <div id="datamodel">
@@ -88,11 +91,20 @@ These correspond to the variables in GAS for each entity type.
 <h5> pluralEntities</h5>
 <p>Maps entity types to their plural forms for configuring fetch calls and calling the right GAS functions (e.g. getDataPeople).
 </p>
+<h5>entityButtons</h5>
+<p>Maps entity types to their respective button labels for the dynamic button. These are dynamically added in the html.
+It basically helps with the configuration of the "search" (=fetch) fields (suggestions, instructions, labels) and the "add/edit" (=submit) button.
+</p>
 <h4>Event Listeners</h4>
 <h5> Fetch Data Button</h5>
 <p>Adds an event listener to the "Fetch Data" button to fetch data for the selected entity.
 </p>
 <h4>Functions</h4>
+<h5>Object.keys(entityButtons)</h5>
+<p>Sets up the entity Buttons in the fetch form, depending on the entity selected.</p>
+<h5>loadSuggestionsForEntity</h5>
+<p>Fetches data for creating the datalist, used in the suggestions during the fetch phase (e.g. checks if a name already exists; users can choose existing names or creating new ones). <br>
+This could be used as validation for names (mainly for avoiding duplicates/spellings); validation for dates is still open.</p>
 <h5>fetchEntityData</h5>
 <p>Fetches data for the selected entity and name. If data is found, it renders the table and form. If no data is found, it prepares the form for adding a new record.
 </p>

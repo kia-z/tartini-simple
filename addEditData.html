@@ -22,7 +22,7 @@
             <h2>DATABASE INTERFACE</h2>
             <p>Instructions....</p>
             <p>Trying to include data model and validation all at once...</p>
-            <h5>NEXT ON CHIARA TODO (TOTRY...): ADD VALIDATION and DROPWDOWNS; RELATIONSHIPS; VISUALISE NOT ONLY BY ENTITY BUT ALSO RELATED IN TABLES</h5>
+            <h5>NEXT ON CHIARA TODO (TOTRY...): RELATIONSHIPS (e.g. show works produed by a person; allow one-to-many, e.g. add another work by this person, etc); VISUALISE NOT ONLY BY ENTITY BUT ALSO RELATED IN TABLES</h5>
         </div>
         <!-- choosing starting point -->
          <div class="container mt-5 bg-info bg-opacity-10 border border-info rounded-end" style="padding: 10px;">
@@ -53,8 +53,14 @@
       Enter the name of the pupil/musician in the field below and click on "Fetch Data".<br>
       If the person is already in the database, the results will appear in the table on the left, and you can edit the data using the form on the right.
     </p>
-    <label for="my_search" id="search_label">Enter Name to search:</label>
-    <input type="text" id="my_search" class="form-control mb-3" placeholder="Start typing..." required />
+    <label for="entity_search_input" id="search_label">Enter Name to search:</label>
+    <input
+  type="text"
+  id="entity_search_input"
+  list="dynamicSuggestions"
+  class="form-control mb-3"
+  placeholder="Start typing..." />
+<datalist id="dynamicSuggestions"></datalist>
     <button type="button" class="btn btn-danger" id="fetch_for_me">Fetch Data</button>
     <p><h5 id="fetch_response" class="mt-3 bg-danger-subtle text-danger p-3 rounded"></h5></p>
   </div>
@@ -110,50 +116,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/tableform.js"></script>
-    <script>
-      // Fetch data button customisation (search by entity depending on button clicked)
-        const entityButtons = {
-          person: {
-            heading: "Check if this person already exists",
-            description: "Enter the name of the pupil/musician...",
-            label: "Enter Name to Fetch:",
-            placeholder: "e.g. Giuseppe Tartini"
-          },
-          activity: {
-            heading: "Check if this activity already exists",
-            description: "Enter the name or description of the activity...",
-            label: "Enter Activity Name:",
-            placeholder: "e.g. Studied in Padua"
-          },
-          work: {
-            heading: "Check if this work already exists",
-            description: "Enter the title or short description of the work...",
-            label: "Enter Work Title:",
-            placeholder: "e.g. Sonata in G Major"
-          },
-          place: {
-            heading: "Check if this place already exists",
-            description: "Enter the name of the place to look up or add.",
-            label: "Enter Place Name:",
-            placeholder: "e.g. Venice"
-          }
-        };
-      
-        Object.keys(entityButtons).forEach(entity => {
-          document.getElementById(entity).addEventListener("click", () => {
-            const section = document.getElementById("fetch_section");
-            section.style.display = "block";
-      
-            // Update content dynamically
-            document.getElementById("step2_heading").textContent = entityButtons[entity].heading;
-            document.getElementById("step2_description").textContent = entityButtons[entity].description;
-            document.getElementById("search_label").textContent = entityButtons[entity].label;
-            document.getElementById("my_search").placeholder = entityButtons[entity].placeholder;
-      
-            // Optional: set a hidden field to track which entity was selected
-            section.dataset.entity = entity;
-          });
-        });
-      </script>
 </body>
 </html>
