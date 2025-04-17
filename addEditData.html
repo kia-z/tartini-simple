@@ -26,10 +26,12 @@
                     <li>Check if the record already exists in the database (searching by name/title)</li>
                     <li>Add or edit the data</li>
                 </ol>
-                <p>In the first step, you can choose between four key entities: person, activity, work, or place. Each entity has its own form and data structure.</p>
-                <p>In the second step, you can check if the record already exists in the database by searching for the name or title (the fetch field is automatically updated depending on which entity you chose in step 1). If it exists, you can edit the data, the form automatically appears below, prefilled with the existing data (and with a summary table on the left side of the screen).</p>
-                <p>If the record does not exist, you can add a new one by filling out the form. The form will dynamically change based on the entity you selected in the first step.</p>
-                <p>There are few validation rules and check lists implemented:
+                <p>In the <b>first step</b>, you can choose between four key entities: person, activity, work, or place. Each entity has its own form and data structure.</p>
+                <p>In the <b>second step</b>, you can check if the record already exists in the database by searching for the name or title (the fetch field is automatically updated depending on which entity you chose in step 1).</p>
+                <p>In the <b>third step</b>, you can either add or edit the data.<br>
+                  If the record exists, you can edit it: the form automatically appears below, prefilled with the existing data (and with a summary table on the left side of the screen).<br>
+                  If the record does not exist, you can add a new one by filling out the form. The form will dynamically change based on the entity you selected in the first step.</p>
+                <p>There are few <b>validation rules and check lists</b> implemented:
                   <ul>
                     <li>When fetching data (Step 2): a datalist function automatically shows records matching the name/title (also partial)</li>
                     <li>Dates: the recommended format is DD-MM-YYYY, if the input is MM-YYYY or only YYYY there will be an alert (are you sure you want to submit a partial date?); any other format will not be accepted (error message).</li>
@@ -41,10 +43,9 @@
 
             <h5>NEXT ON CHIARA TODO (TOTRY...):</h5>
             <ul>
-              <li>currently datalist are applied only to main entity (person_name, activity_title, work_title, place_name): try to include them also within form fields (i.e. in a person-form, add datalist for choosing birth_place)</li>
+              <li>currently datalist are applied only to main entity (person_name, activity_title, work_title, place_name) and place names. Theoretically they could be expanded (but this multiplies the code, and it's better to wait for a clearer data model?).</li>
               <li>try to include relationships: e.g. people_involved, work_references, i.e. show works produced by a person, etc.</li>
-              <li>relationships2: allow one-to-many (i.e. one person produced many works, activities, etc.)</li>
-              <li>part relationship, part form options: add another work by this person, e.g. via button</li>
+              <li>relationships2: allow one-to-many (i.e. one person produced many works, activities, etc.). In practice, a button "add another", but the logic depends on the data model - think it through...</li>
               <li>When people add a new place (i.e. not yet on our "places" table), should we prompt them to fill it in? (it's mostly reconciliation work though that can be done later?)</li>
               <li>consider whether to have more tables showing more data/related data/entitities, i.e. think about how to show records/relationships</li>
               <li>fetching identifiers from elsewhere? try geonames API first, since I know it, then try RISM/VIAF or others</li>
