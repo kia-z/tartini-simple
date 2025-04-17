@@ -105,6 +105,9 @@ It basically helps with the configuration of the "search" (=fetch) fields (sugge
 <h5>loadSuggestionsForEntity</h5>
 <p>Fetches data for creating the datalist, used in the suggestions during the fetch phase (e.g. checks if a name already exists; users can choose existing names or creating new ones). <br>
 This could be used as validation for names (mainly for avoiding duplicates/spellings); validation for dates is still open.</p>
+<h5>loadSuggestionsForPlaceField</h5>
+<p>Fetches the list of existing place names (from place_name in table "places") and create a datalist, for suggesting those names in place-related fields (birth place, death place, activity place, work place).</p>
+<p>Used in render form fields function.</p>
 <h5>fetchEntityData</h5>
 <p>Fetches data for the selected entity and name. If data is found, it renders the table and form. If no data is found, it prepares the form for adding a new record.
 </p>
@@ -120,6 +123,8 @@ This could be used as validation for names (mainly for avoiding duplicates/spell
 <h5>clearFormFields</h5>
 <p>Clears all form fields for the selected entity.
 </p>
+<h5>isValidDate</h5>
+<p>Validation for dates, used in the forms. It accepts formats: DD-MM-YYYY, MM-YYYY, and YYYY. Otherwise, there is an error message via alert and the user cannot submit the record.</p>
 <h5>setupDynamicButton</h5>
 <p>Configures the dynamic button for adding or editing records.
 </p>

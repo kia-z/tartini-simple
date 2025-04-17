@@ -354,7 +354,6 @@ function fetchEntityData(entity, name) {
 
     return false; // Invalid format
 }
-  
 
 function setupDynamicButton(mode, entity) {
     const dynamicBtn = document.getElementById("dynamic_btn");
