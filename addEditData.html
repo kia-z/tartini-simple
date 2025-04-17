@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tartini Database</title>
+    <meta name="description" content="Database interface for the project Tartinians in Europe">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#header').load('header.html');
+        });
+    </script>    
+</head>
+<body>
+    <!-- start header (incl.navbar) -->
+    <div id="header"></div>
+    <!-- end header -->
+    <main>
+        <div class="container mt-5">
+            <h2>DATABASE INTERFACE</h2>
+            <p>Instructions....</p>
+            <p>Trying to include data model and validation all at once...</p>
+            <h5>NEXT ON CHIARA TODO (TOTRY...): ADD VALIDATION and DROPWDOWNS; RELATIONSHIPS; VISUALISE NOT ONLY BY ENTITY BUT ALSO RELATED IN TABLES</h5>
+        </div>
+        <!-- choosing starting point -->
+         <div class="container mt-5 bg-info bg-opacity-10 border border-info rounded-end" style="padding: 10px;">
+            <h4>Step 1: What do you want to add or check</h4>
+            <p>Do you want to check/add/edit a record about a person, an activity, a work, or a place?</p>
+            <p>Click on one of the following buttons to begin.</p>
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary d-block mx-auto" id="person">Person</button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary d-block mx-auto" id="activity">Activity</button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary d-block mx-auto" id="work">Work</button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary d-block mx-auto" id="place">Place</button>
+                </div>
+            </div>
+            </div>
+       <!-- FETCH Section (hidden by default) -->
+        <div class="container mt-5 bg-danger bg-opacity-10 border border-danger rounded-end" style="padding: 10px;">
+            <h4>Step 2: Check if record already exists</h4>
+<div class="container mt-5" id="fetch_section" style="display: none;" data-entity="">
+    <h6 id="step2_heading">Check if this person already exists</h6>
+    <p id="step2_description">
+      Enter the name of the pupil/musician in the field below and click on "Fetch Data".<br>
+      If the person is already in the database, the results will appear in the table on the left, and you can edit the data using the form on the right.
+    </p>
+    <label for="my_search" id="search_label">Enter Name to search:</label>
+    <input type="text" id="my_search" class="form-control mb-3" placeholder="Start typing..." required />
+    <button type="button" class="btn btn-danger" id="fetch_for_me">Fetch Data</button>
+    <p><h5 id="fetch_response" class="mt-3 bg-danger-subtle text-danger p-3 rounded"></h5></p>
+  </div>
+</div>
+  <!-- table and form -->
+  
+<!-- step 3: add or edit data -->
+<div class="container mt-5">
+    <div class="row">
+        <h4>Step 3: Add or edit data</h4>
+        <p>On the left column, you see any record which we have for this person/activity/work/place. You can modify them in the right part of the screen.</p>
+        <p>In case we do not have any record, add a new one.</p>
+    </div>
+
+    <!-- Existing Data Table -->
+  <div class="row">
+    <div class="col-md-3 bg-light" id="data_table_section" style="display: none;">
+    <h6>Existing Data</h6>
+    <p>We currently have the following data for this record:</p>
+    <table class="table table-bordered table-light">
+        <thead>
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+      </thead>
+      <tbody id="data_table_body">
+        <!-- This will be populated dynamically -->
+      </tbody>
+    </table>
+  </div>
+  <!-- Dynamic Form -->
+  <div class="col-md-9" id="form_section" style="display: none;">
+    <h6>Add/Edit Data</h6>
+    <form id="my_form">
+      <div id="form_fields"></div>
+      <button type="button" id="dynamic_btn" class="btn btn-success mt-3">Submit</button>
+    </form>
+  </div>
+  </div>
+  </div>
+</main>
+    <!-- start footer -->
+    <footer>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#myfooter').load('footer.html');
+            });
+        </script>
+        <div id="myfooter"></div>
+    </footer>
+    <!-- end footer -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/tableform.js"></script>
+    <script>
+      // Fetch data button customisation (search by entity depending on button clicked)
+        const entityButtons = {
+          person: {
+            heading: "Check if this person already exists",
+            description: "Enter the name of the pupil/musician...",
+            label: "Enter Name to Fetch:",
+            placeholder: "e.g. Giuseppe Tartini"
+          },
+          activity: {
+            heading: "Check if this activity already exists",
+            description: "Enter the name or description of the activity...",
+            label: "Enter Activity Name:",
+            placeholder: "e.g. Studied in Padua"
+          },
+          work: {
+            heading: "Check if this work already exists",
+            description: "Enter the title or short description of the work...",
+            label: "Enter Work Title:",
+            placeholder: "e.g. Sonata in G Major"
+          },
+          place: {
+            heading: "Check if this place already exists",
+            description: "Enter the name of the place to look up or add.",
+            label: "Enter Place Name:",
+            placeholder: "e.g. Venice"
+          }
+        };
+      
+        Object.keys(entityButtons).forEach(entity => {
+          document.getElementById(entity).addEventListener("click", () => {
+            const section = document.getElementById("fetch_section");
+            section.style.display = "block";
+      
+            // Update content dynamically
+            document.getElementById("step2_heading").textContent = entityButtons[entity].heading;
+            document.getElementById("step2_description").textContent = entityButtons[entity].description;
+            document.getElementById("search_label").textContent = entityButtons[entity].label;
+            document.getElementById("my_search").placeholder = entityButtons[entity].placeholder;
+      
+            // Optional: set a hidden field to track which entity was selected
+            section.dataset.entity = entity;
+          });
+        });
+      </script>
+</body>
+</html>

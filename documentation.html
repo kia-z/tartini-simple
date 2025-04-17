@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tartini Database</title>
+    <meta name="description" content="Database interface for the project Tartinians in Europe">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#header').load('header.html');
+        });
+    </script>    
+</head>
+<body>
+    <!-- start header (incl.navbar) -->
+    <div id="header"></div>
+    <!-- end header -->
+
+    <main>
+        <div class="container mt-5">
+            <h1>Documentation</h1>
+        <!-- 
+        <div id="datamodel">
+            <h2>Data Model</h2>
+            <h5>Table: People</h5>
+            <ul>
+                <li></li>
+            </ul>
+            <h5>Table: Activities</h5>
+            <ul>
+                <li></li>
+            </ul>
+            <h5>Table: Works</h5>
+            <ul>
+                <li></li>
+            </ul>
+            <h5>Table: Places</h5>
+            <ul>
+                <li></li>
+            </ul>
+        </div>
+    -->
+        <div id="app">
+            <h2>App Architecture</h2>
+            <p>
+                Frontend: vanilla html and js. <br>
+                Backend: google spreadsheet and Google Script deployed as web app.
+            </p>
+            <p>
+                The app is a simple CRUD interface for a google spreadsheet (well, not really "Deleting"). <br>
+                The frontend is a simple html page with a form to add/edit data (<a href="/addEditData.html">here</a>); 
+                an embedded spreadsheet (<a href="/view_data.html">here</a>); and this documentation. <br>
+                The backend is a Google Script that handles the requests from the frontend and updates the spreadsheet accordingly. 
+                The add/edit data function is the one documented in details here.
+            </p>
+            <p>
+                The page "Add/Edit data" is organised in three steps: <br>
+                <ol>
+                <li>Select the type of data to add/edit (people, activities, works, places).</li>
+                <li>Search if the record already exist. <br> 
+                If the data already exist, the current record will be shown in a table on the left, with the form prefilled with existing data on the right, which the user can edit.<br>
+            If the data do not exist, only the form will appear.</li>
+                <li>Fill the form with the data to add/edit and submit (there will be conditional messages, depending on whether the user is editing or adding data).</li>
+                </ol>
+            </p>
+            <p>Note that there are a lot of console logs, to check every step of the process. Additional logs are also in the GAS.</p>
+            <p>
+                The "search" function is a GET request to the Google Script, sending the type of data and the name of the person to search and eventually fetch. It is case insensitive and trims white spaces, but further spellings/* are not yet implemented.<br>
+                "Add data": it's a POST request to the Google Script sending the data from the form. <br>
+                "Edit data": it's first a GET request to the Google Script, sending the name of the person to fetch, 
+                followed by a POST request to the Google Script, sending the updated data from the form. <br>
+            </p>
+            <h3>Javascript</h3>
+
+            <p>tableform.js contains JavaScript code that dynamically handles fetching, displaying, and submitting data for different entities (`person`, `activity`, `work`, `place`). It includes functionality for rendering tables, forms, and dynamically configuring a button for adding or editing records.
+            </p>
+            <h4>Entity Configuration</h4>
+
+<h5>entityFields</h5>
+<p>Defines the fields for each entity type. These fields are used to dynamically render forms and tables.
+These correspond to the variables in GAS for each entity type.
+</p>
+<h5>fieldLabels</h5>
+<p>Maps field names to user-friendly labels for display in forms and tables. These are dynamically added in the html.
+</p>
+<h5> pluralEntities</h5>
+<p>Maps entity types to their plural forms for configuring fetch calls and calling the right GAS functions (e.g. getDataPeople).
+</p>
+<h4>Event Listeners</h4>
+<h5> Fetch Data Button</h5>
+<p>Adds an event listener to the "Fetch Data" button to fetch data for the selected entity.
+</p>
+<h4>Functions</h4>
+<h5>fetchEntityData</h5>
+<p>Fetches data for the selected entity and name. If data is found, it renders the table and form. If no data is found, it prepares the form for adding a new record.
+</p>
+<h5>renderDataTable</h5>
+<p>Renders a table displaying the existing data for the selected entity.
+</p>
+<h5>renderFormFields</h5>
+<p>Renders a form with input fields for the selected entity.
+</p>
+<h5>fillFormFields</h5>
+<p>Fills the form fields with data.
+</p>
+<h5>clearFormFields</h5>
+<p>Clears all form fields for the selected entity.
+</p>
+<h5>setupDynamicButton</h5>
+<p>Configures the dynamic button for adding or editing records.
+</p>
+<h3>Google Apps Script (GAS)</h3>
+        <p>...COMING SOON...</p>
+
+<h4>Variables in GAS People</h4>
+<h6>Sheet name</h6>
+<p>sheetPeople</p>
+<h6>Functions and corresponding actions</h6>
+<i>Note: in the Javascript, you need to mention the action, so that the respective Google Script function is called.</i>
+<ul>
+    <li>Action: [not needed, it's the get call with parameter.name in automatic used in the fetch call in javascript]</li>
+    <li>Function: getDataPeople</li>
+    <li>Action: addPeople</li>
+    <li>Function: addDataPeople</li>
+    <li>Action: editPeople</li>
+    <li>Function: editDataPeople</li>
+</ul>
+<h6>Fields (corresponding to name of columns in G-Sheet)</h6>
+    <ul>
+        <li>timestamp</li>
+        <li>person_name</li>
+        <li>person_alternative_name</li>
+        <li>person_birth_date</li>
+        <li>person_birth_place</li>
+        <li>person_death_date</li>
+        <li>person_death_place</li>
+        <li>person_ids</li>
+        <li>person_sources</li>
+    </ul>
+<h4>Variables in GAS Activities</h4>
+<h6>Sheet name</h6>
+<p>sheetActivities</p>
+<h6>Functions and corresponding actions</h6>
+<i>Note: in the Javascript, you need to mention the action, so that the respective Google Script function is called.</i>
+<ul>
+    <li>Action: [not needed, it's the get call with parameter.name in automatic used in the fetch call in javascript]</li>
+    <li>Function: getDataActivities</li>
+    <li>Action: addActivities</li>
+    <li>Function: addDataActivities</li>
+    <li>Action: editActivities</li>
+    <li>Function: editDataActivities</li>
+</ul>
+<h6>Fields (corresponding to name of columns in G-Sheet)</h6>
+    <ul>
+        <li>timestamp</li>
+        <li>activity_title</li>
+        <li>activity_type</li>
+        <li>activity_start_date</li>
+        <li>activity_end_date</li>
+        <li>activity_place</li>
+        <li>activity_institution</li>
+        <li>activity_instrument_played</li>
+        <li>activity_testimonies</li>
+        <li>activity_sources</li>
+        <li>activity_people_involved</li>
+        <li>activity_works_references</li>      
+    </ul>     
+       
+<h4>Variables in GAS Works</h4>
+<h6>Sheet name</h6>
+<p>sheetWorks</p>
+<h6>Functions and corresponding actions</h6>
+<i>Note: in the Javascript, you need to mention the action, so that the respective Google Script function is called.</i>
+<ul>
+    <li>Action: [not needed, it's the get call with parameter.name in automatic used in the fetch call in javascript]</li>
+    <li>Function: getDataWorks</li>
+    <li>Action: addWorks</li>
+    <li>Function: addDataWorks</li>
+    <li>Action: editWorks</li>
+    <li>Function: editDataWorks</li>
+</ul>
+<h6>Fields (corresponding to name of columns in G-Sheet)</h6>
+    <ul>
+        <li>timestamp</li>
+        <li>work_title</li>
+        <li>work_type</li>
+        <li>work_subtype</li>
+        <li>work_people_involved</li>
+        <li>work_performance</li>
+        <li>work_place</li>
+        <li>work_sources</li>
+        <li>work_date</li>
+    </ul>
+<h4>Variables in GAS Places</h4>
+<h6>Sheet name</h6>
+<p>sheetPlaces</p>
+<h6>Functions and corresponding actions</h6>
+<i>Note: in the Javascript, you need to mention the action, so that the respective Google Script function is called.</i>
+<ul>
+    <li>Action: [not needed, it's the get call with parameter.name in automatic used in the fetch call in javascript]</li>
+    <li>Function: getDataPlaces</li>
+    <li>Action: addPlaces</li>
+    <li>Function: addDataPlaces</li>
+    <li>Action: editPlaces</li>
+    <li>Function: editDataPlaces</li>
+</ul>
+<h6>Fields (corresponding to name of columns in G-Sheet)</h6>
+    <ul>
+        <li>timestamp</li>
+        <li>place_name</li>
+        <li>place_country</li>
+        <li>place_lat</li>
+        <li>place_long</li>
+        <li>place_geonames</li>
+    </ul>
+    </div>
+        </div>
+    </main>
+
+    <!-- start footer -->
+    <footer>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#myfooter').load('footer.html');
+            });
+        </script>
+        <div id="myfooter"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
