@@ -38,13 +38,13 @@
                     <li>Place names: the datalist function will show places matching the name (also partial) and will suggest the closest match (based on place_name field in table "places", i.e. places that have been fully registered already).</li>
                     <li>for debugging/exploring purposes: there are many logs, documenting each step (in the console for the javascript; in the google app for the google app script)</li>
                     <li>relationships: if you add a work/activity departing from a person, relationship_type is controlled by an array created by me (i.e. you need to choose one of the existing terms)</li>
+                    <li>factoids now work - although if they mention new people, those are not added to the person list (need subform of subform for it? is it worth it or better validate against existing people? data model question...</li>
                   </ul>
                 </p>
             </p>
 
             <h5>NEXT ON CHIARA TODO (TOTRY...):</h5>
             <ul>
-              <li>convert related entities extra rows at the bottom in factoid submission (i.e. add sources and revise)</li>
               <li>currently datalist are applied only to main entity (person_name, activity_title, work_title, place_name) and place names. Theoretically they could be expanded (but this multiplies the code, and it's better to wait for a clearer data model?).</li>
               <li>add zotero validation/linking</li>
               <li>consider whether to have more tables showing more data/related data/entitities, i.e. think about how to show records/relationships</li>
