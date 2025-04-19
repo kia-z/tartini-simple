@@ -19,7 +19,7 @@ function openRelatedEntityForm(targetEntity, sourceValue, relationType = "") {
         const sourceId = sourceIdInput ? sourceIdInput.value : "unknown";
   
   // Save current form (optional)
-    saveCurrentForm("edit", currentEntity) // or "add", depending on context
+  saveCurrentForm("edit", currentEntity, true) // or "add", depending on context
     .then(() => {
     // Build the new form
       renderFormFields(targetEntity);
@@ -29,6 +29,12 @@ function openRelatedEntityForm(targetEntity, sourceValue, relationType = "") {
   if (targetEntity === "place" && sourceValue) {
     const placeInput = document.getElementById("place_name");
     if (placeInput) placeInput.value = sourceValue;
+  }
+
+  // Prefill the peson_name if creating a person
+  if (targetEntity === "person" && sourceValue) {
+    const personInput = document.getElementById("person_name");
+    if (personInput) personInput.value = sourceValue;
   }
 
    // Prefill the people_involved if departing from a person form
@@ -55,164 +61,93 @@ function openRelatedEntityForm(targetEntity, sourceValue, relationType = "") {
 });
 }
   
-// save new data before switching form
-function saveCurrentForm(mode, entity) {
-  return new Promise((resolve, reject) => {
-    let valid = true;
-    const payload = {
-      action: mode === "edit" ? "edit" + pluralEntities[entity] : "add" + pluralEntities[entity]
-    };
+// validate new data and build payload for submission
+function buildFormPayload(mode, entity) {
+  let valid = true;
 
-    entityFields[entity].forEach(field => {
-      const el = document.getElementById(field);
-      if (el) {
-        payload[field] = el.value;
+  const payload = {
+    action: mode === "edit" ? "edit" + pluralEntities[entity] : "add" + pluralEntities[entity]
+  };
 
-          // Validate date fields
-                // Validate date fields
-                if (field.includes("date") && el.value.trim() !== "") {
-                  if (!isValidDate(el.value.trim())) {
-                      el.classList.add("is-invalid");
-                      valid = false;
-                  } else {
-                      el.classList.remove("is-invalid");
+  entityFields[entity].forEach(field => {
+    const el = document.getElementById(field);
+    if (el) {
+      const value = el.value.trim();
+      payload[field] = value;
 
-                      // Check for partial dates and confirm with the user
-                      const isPartialDate = /^\d{4}$/.test(el.value.trim()) || /^\d{2}-\d{4}$/.test(el.value.trim());
-                      if (isPartialDate) {
-                          const confirmPartial = confirm(`The date "${el.value}" is incomplete. Do you want to proceed?`);
-                          if (!confirmPartial) {
-                              valid = false;
-                          }
-                      }
-                  }
-              }
-      }
-    });
+      // Validate date fields
+      if (field.includes("date") && value !== "") {
+        if (!isValidDate(value)) {
+          el.classList.add("is-invalid");
+          valid = false;
+        } else {
+          el.classList.remove("is-invalid");
 
-    const subPlaceFields = ["person_birth_place", "person_death_place", "activity_place", "work_place"];
-
-    subPlaceFields.forEach(baseField => {
-      ["place_country", "place_lat", "place_long", "place_geonames"].forEach(placeField => {
-        const subInput = document.getElementById(`${baseField}_${placeField}`);
-        if (subInput && subInput.value.trim()) {
-          payload[`${baseField}_${placeField}`] = subInput.value.trim();
+          const isPartialDate = /^\d{4}$/.test(value) || /^\d{2}-\d{4}$/.test(value);
+          if (isPartialDate) {
+            const confirmPartial = confirm(`The date "${value}" is incomplete. Do you want to proceed?`);
+            if (!confirmPartial) {
+              valid = false;
+            }
+          }
         }
-      });
-  
-      const placeNameInput = document.getElementById(`${baseField}_place_name`);
-      if (placeNameInput && placeNameInput.value.trim()) {
-        payload[`${baseField}_place_name`] = placeNameInput.value.trim();
+      }
+    }
+  });
+
+  // Optional: include sub-place fields if relevant
+  const subPlaceFields = ["person_birth_place", "person_death_place", "activity_place", "work_place"];
+  subPlaceFields.forEach(baseField => {
+    ["place_country", "place_lat", "place_long", "place_geonames"].forEach(placeField => {
+      const subInput = document.getElementById(`${baseField}_${placeField}`);
+      if (subInput && subInput.value.trim()) {
+        payload[`${baseField}_${placeField}`] = subInput.value.trim();
       }
     });
 
-    if (!valid) {
-      alert("Please correct invalid date fields (should be DD-MM-YYYY or MM-YYYY or YYYY).");
-      return;
+    const placeNameInput = document.getElementById(`${baseField}_place_name`);
+    if (placeNameInput && placeNameInput.value.trim()) {
+      payload[`${baseField}_place_name`] = placeNameInput.value.trim();
     }
+  });
 
-  if (!confirm("Do you want to save this record before proceeding?")) {
-    return reject("User cancelled save");
+  if (!valid) {
+    alert("Please correct invalid date fields (should be DD-MM-YYYY, MM-YYYY, or YYYY).");
+    return null;
   }
 
-  console.log("Saving these data:", payload);
-  fetch("https://script.google.com/macros/s/AKfycbyiWuECCOa4UvjCen7jDNFC-VKQ4Zcv8NAAwJWVVOCLaKHFCLLUj1ezCvp1W5Avov3b1Q/exec", {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-  })
-.then(data => {
-  alert("Record saved successfully! Now continuing.");
-})
-  .then(() => {
-    let subformsSaved = false; 
-    // Now look for any subform to submit (e.g. for places)
-    if (entity === "person") {
-      subPlaceFields.forEach(baseField => {
-        const name = document.getElementById(`${baseField}_place_name`)?.value?.trim();
-        const country = document.getElementById(`${baseField}_place_country`)?.value?.trim();
-        const lat = document.getElementById(`${baseField}_place_lat`)?.value?.trim();
-        const long = document.getElementById(`${baseField}_place_long`)?.value?.trim();
-        const geo = document.getElementById(`${baseField}_place_geonames`)?.value?.trim();
-
-        if (name && (country || lat || long || geo)) {
-          const placePayload = {
-            action: "addPlaces",
-            place_name: name,
-            place_country: country || "",
-            place_lat: lat || "",
-            place_long: long || "",
-            place_geonames: geo || ""
-          };
-
-          console.log("Saving place subform:", placePayload);
-  
-          fetch("https://script.google.com/macros/s/AKfycbyiWuECCOa4UvjCen7jDNFC-VKQ4Zcv8NAAwJWVVOCLaKHFCLLUj1ezCvp1W5Avov3b1Q/exec", {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(placePayload)
-          }).then(() => {
-            alert("Subform place saved successfully! Now continuing.");
-            document.getElementById("my_form").reset();
-           }).catch(err => {
-            console.error("Failed to add place subform:", err);
-          });
-        }
-      });
-    }
-    // Always resolve after checking for subforms
-    if (!subformsSaved) {
-      resolve(payload);
-    }
-    // save factoids if any
-    let factoidsSaved = false;
-if (multipleFactoids && multipleFactoids.length > 0) {
-  const factoidRequests = multipleFactoids
-    .filter(f => f.factoid_target_id && f.factoid_relationship_type)
-    .map(factoid => {
-      const factoidPayload = {
-        action: "addFactoids",
-        factoid_target_entity: "person",
-        factoid_target_id: factoid.factoid_target_id,
-        factoid_source_entity: "person",
-        factoid_source_id: factoid.factoid_source_id,
-        factoid_relationship_type: factoid.factoid_relationship_type,
-        factoid_source: factoid.factoid_source,
-        factoid_date_from: factoid.factoid_date_from,
-        factoid_date_to: factoid.factoid_date_to,
-        factoid_notes: factoid.factoid_notes
-      };
-
-      console.log("Submitting factoid:", factoidPayload);
-
-      return fetch("https://script.google.com/macros/s/AKfycbyiWuECCOa4UvjCen7jDNFC-VKQ4Zcv8NAAwJWVVOCLaKHFCLLUj1ezCvp1W5Avov3b1Q/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(factoidPayload)
-      });
-    });
-
-  // Wait for all factoid fetches to complete
-  Promise.all(factoidRequests)
-    .then(() => {
-      console.log("All factoids submitted.");
-      resolve(payload);  // Final resolve after factoids
-    })
-    .catch(err => {
-      console.error("Error submitting factoids:", err);
-      reject(err);
-    });
-} else {
-  resolve(payload);  // No factoids to submit? Just resolve.
+  return payload;
 }
-})
-.catch(error => {
-  console.error("Save failed:", error);
-  alert("Could not save data. Please try again.");
-  reject(error);
-});
-});
+ 
+// submit new data before switching form
+async function saveCurrentForm(mode, entity) {
+  try {
+    // 1. Build and validate the form data
+    const payload = buildFormPayload(mode, entity);
+    if (!payload) throw new Error("Form validation failed.");
+
+    // 2. Confirm intent
+    if (!confirm("Do you want to add this record before proceeding?")) {
+      throw new Error("User cancelled submission.");
+    }
+
+    // 3. Submit form and related data
+    await submitForm(mode, entity, payload);
+    await submitSubplaces(payload, entity);
+    await submitFactoid(payload, entity);
+    await submitRelationship(payload, entity);
+
+    // 4. Clean up
+    document.getElementById("my_form").reset();
+    multipleFactoids = [];
+    window.pendingRelationship = null;
+
+    console.log("All data submitted and cleaned up.");
+    return payload;
+
+  } catch (err) {
+    console.error("Save failed:", err);
+    alert("Could not save data. Please fix any issues and try again.");
+    throw err;
+  }
 }

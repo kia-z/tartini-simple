@@ -37,7 +37,7 @@ function addFactoidRow() {
     const datalist = document.createElement("datalist");
     datalist.id = datalistId;
     loadSuggestionsForEntity("person", datalist);
-  
+
     // Relationship type
     const factoid_relationship_type = document.createElement("input");
     factoid_relationship_type.type = "text";
@@ -56,16 +56,28 @@ function addFactoidRow() {
     const factoid_date_from = document.createElement("input");
     factoid_date_from.type = "text";
     factoid_date_from.className = "form-control col";
-    factoid_date_from.placeholder = "Earliest date?";
+    factoid_date_from.placeholder = "Earliest date? DD-MM-YYYY";
     factoid_date_from.dataset.FactoidIndex = rowIndex;
   
+    // Add feedback for factoid_date_from
+    const feedbackFrom = document.createElement("div");
+    feedbackFrom.className = "invalid-feedback";
+    feedbackFrom.innerText = "Please enter a valid date (DD-MM-YYYY).";
+    factoid_date_from.insertAdjacentElement("afterend", feedbackFrom);
+
     // Date to
     const factoid_date_to = document.createElement("input");
     factoid_date_to.type = "text";
     factoid_date_to.className = "form-control col";
-    factoid_date_to.placeholder = "Latest date?";
+    factoid_date_to.placeholder = "Latest date? DD-MM-YYYY";
     factoid_date_to.dataset.FactoidIndex = rowIndex;
   
+    // Add feedback for factoid_date_to
+    const feedbackTo = document.createElement("div");
+    feedbackTo.className = "invalid-feedback";
+    feedbackTo.innerText = "Please enter a valid date (DD-MM-YYYY).";
+    factoid_date_to.insertAdjacentElement("afterend", feedbackTo);
+    
     // Notes
     const factoid_notes = document.createElement("textarea");
     factoid_notes.className = "form-control col";

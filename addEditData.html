@@ -38,17 +38,23 @@
                     <li>Place names: the datalist function will show places matching the name (also partial) and will suggest the closest match (based on place_name field in table "places", i.e. places that have been fully registered already).</li>
                     <li>for debugging/exploring purposes: there are many logs, documenting each step (in the console for the javascript; in the google app for the google app script)</li>
                     <li>relationships: if you add a work/activity departing from a person, relationship_type is controlled by an array created by me (i.e. you need to choose one of the existing terms)</li>
-                    <li>factoids now work - although if they mention new people, those are not added to the person list (need subform of subform for it? is it worth it or better validate against existing people? data model question...</li>
+                    <li>factoids now work</li>
+                    <li>If I mention a new person in a factoid, I'm prompted to record it in the people db</li>
+                    <li>automatic WikidataID for person_name works well</li>
                   </ul>
                 </p>
             </p>
 
+            <h5>OPEN PROBLEMS FOR THE GROUP</h5>
+            <ul>
+              <li><b>Data modelling questions</b>: relationships / factoids /  both (i.e. now there are relationships between pepole-activity-work-place + factoids)?</li>
+              <li>theoretically, I could easily implement Geonames identifiers, fetching also country/lat/long (but it requires an account, and I don't want to expose my username on Github for long term; hence, not working right now)</li>
+              <li>fetching <b>RISM identifiers</b>: is more complicated, it is possible to fetch MARC XML and then parse, apparently the API should give also JSON-LD but it is not so clear - but there are also ambiguities about names, etc. which could be problematic with automatic fetch and we would need to implement more controls...</li>
+            </ul>
             <h5>NEXT ON CHIARA TODO (TOTRY...):</h5>
             <ul>
-              <li>currently datalist are applied only to main entity (person_name, activity_title, work_title, place_name) and place names. Theoretically they could be expanded (but this multiplies the code, and it's better to wait for a clearer data model?).</li>
               <li>add zotero validation/linking</li>
               <li>consider whether to have more tables showing more data/related data/entitities, i.e. think about how to show records/relationships</li>
-              <li>fetching identifiers from elsewhere? try geonames API first, since I know it, then try RISM/VIAF or others</li>
               <li>check if I can reduce my own code and use a google form for adding data instead (and my code will remain only for edit/viewing data eventually)</li>
             </ul>
         </div>
@@ -147,10 +153,15 @@
     <script src="js/suggestions.js"></script>
     <script src="js/validationDate.js"></script>
     <script src="js/fetch.js"></script>
+    <script src="js/identifiers.js"></script>
     <script src="js/render.js"></script>
     <script src="js/factoids.js"></script>
     <script src="js/relationships.js"></script>
+    <script src="js/submission/submitMainLogic.js"></script>
+    <script src="js/submission/submitForms.js"></script>
+    <script src="js/submission/submitSubPlaces.js"></script>
+    <script src="js/submission/submitRelationships.js"></script>
+    <script src="js/submission/submitFactoids.js"></script>
     <script src="js/relatedForms.js"></script>
-    <script src="js/submit.js"></script>
 </body>
 </html>

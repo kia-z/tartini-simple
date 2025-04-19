@@ -25,7 +25,8 @@ function renderDataTable(entity, data) {
 
     tableSection.style.display = "block";
   }
-  
+ 
+  let qid = null;
 // render form fields for selected entity 
   function renderFormFields(entity) {
     const formContainer = document.getElementById("form_fields");
@@ -228,18 +229,45 @@ formContainer.appendChild(extraControls);
 
     }; // end of renderFormFields
 
-  function fillFormFields(data) {
-    console.log("Filling form fields with data:", data);
-
-    for (let key in data) {
-        const el = document.getElementById(key);
+    const fieldAliases = {
+      work_name: "work_title", // map old field names to new ones
+      activity_name: "activity_title"
+    };
+    
+    function fillFormFields(data) {
+      console.log("Filling form fields with data:", data);
+    
+      for (let key in data) {
+        const actualKey = fieldAliases[key] || key;
+        const el = document.getElementById(actualKey);
         if (el) {
-            el.value = data[key];
+          el.value = data[key];
+
+          // Check and fetch Wikidata if it's the person_name field
+          if (actualKey === "person_name" && data[key]) {
+            fetchWikidataFromWikipedia(data[key]).then(qid => {
+              if (qid) {
+                console.log(`Auto-fetched QID for "${data[key]}": ${qid}`);
+                let idField = document.getElementById("person_ids");
+    
+                if (!idField) {
+                  idField = document.createElement("input");
+                  idField.type = "hidden";
+                  idField.id = "person_ids";
+                  idField.name = "person_ids";
+                  el.closest("form")?.appendChild(idField);
+                }
+    
+                idField.value = qid;
+              }
+            });
+          }
         } else {
-            console.warn(`Form field with ID "${key}" not found.`);
+          console.warn(`Form field with ID "${actualKey}" not found.`);
         }
+      }     
     }
-  }
+    
   
   function clearFormFields(entity) {
     entityFields[entity].forEach(field => {

@@ -44,6 +44,14 @@ const entityFields = {
       "place_long",
       "place_geonames"
     ],
+    relationship: [
+      "timestamp",
+      "relation_source_entity",
+      "relation_source_id",	
+      "relation_type",	
+      "relation_target_entity",	
+      "relation_target_id"
+    ],
     factoid: [
       "timestamp",
       "factoid_source_entity",
@@ -135,6 +143,9 @@ const entityFields = {
     work: ["included_in", "performed", "referenced_in", "composer_of", "copied", "performed_in"],
     place: ["happened_in", "born_in", "died_in"]
   }
+
+  const peopleBeingAdded = new Set(); // globally declared
+  const peopleInSuggestions = [];
 
     Object.keys(entityButtons).forEach(entity => {
       const button = document.getElementById(entity);
