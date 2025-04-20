@@ -9,7 +9,7 @@ function loadSuggestionsForEntity(entity, targetElementIdOrElement = "dynamicSug
       console.warn("No datalist found for entity:", entity);
       return;
     }
-  fetch(`https://script.google.com/macros/s/AKfycbyiWuECCOa4UvjCen7jDNFC-VKQ4Zcv8NAAwJWVVOCLaKHFCLLUj1ezCvp1W5Avov3b1Q/exec?action=get_list&entity=${entity}`, {
+  fetch(`https://script.google.com/macros/s/AKfycbyBBRlu5qk8SgG-QJhAhriKSLwLh7HJ4DH5KmUyLc2aggftNvHyB3LOKNqQC0CM2cNB3w/exec?action=get_list&entity=${entity}`, {
       method: "GET"
   })
       .then(res => res.json())
@@ -26,7 +26,7 @@ function loadSuggestionsForEntity(entity, targetElementIdOrElement = "dynamicSug
   
   // fetch data for place-related fields  
   function loadSuggestionsForPlaceField(field, datalist) {
-    fetch(`https://script.google.com/macros/s/AKfycbyiWuECCOa4UvjCen7jDNFC-VKQ4Zcv8NAAwJWVVOCLaKHFCLLUj1ezCvp1W5Avov3b1Q/exec?action=get_suggestions&field=place_name`, {
+    fetch(`https://script.google.com/macros/s/AKfycbyBBRlu5qk8SgG-QJhAhriKSLwLh7HJ4DH5KmUyLc2aggftNvHyB3LOKNqQC0CM2cNB3w/exec?action=get_suggestions&field=place_name`, {
         method: "GET"
     })
     .then(res => res.json())
@@ -46,7 +46,7 @@ function loadSuggestionsForEntity(entity, targetElementIdOrElement = "dynamicSug
 let PlaceDetailsRecords = [];
 
 function loadSuggestionsForPlaceDetails() {
-  fetch(`https://script.google.com/macros/s/AKfycbyiWuECCOa4UvjCen7jDNFC-VKQ4Zcv8NAAwJWVVOCLaKHFCLLUj1ezCvp1W5Avov3b1Q/exec?action=get_suggestions`, {
+  fetch(`https://script.google.com/macros/s/AKfycbyBBRlu5qk8SgG-QJhAhriKSLwLh7HJ4DH5KmUyLc2aggftNvHyB3LOKNqQC0CM2cNB3w/exec?action=get_suggestions`, {
     method: "GET"
   })
   .then(res => res.json())
@@ -77,7 +77,7 @@ function loadSuggestionsForRelationshipTypes(field, datalist) {
       return;
     }
   
-    fetch(`https://script.google.com/macros/s/AKfycbyiWuECCOa4UvjCen7jDNFC-VKQ4Zcv8NAAwJWVVOCLaKHFCLLUj1ezCvp1W5Avov3b1Q/exec?action=get_relations&field=relation_type`, {
+    fetch(`https://script.google.com/macros/s/AKfycbyBBRlu5qk8SgG-QJhAhriKSLwLh7HJ4DH5KmUyLc2aggftNvHyB3LOKNqQC0CM2cNB3w/exec?action=get_relations&field=relation_type`, {
       method: "GET"
     })
       .then(res => res.json())

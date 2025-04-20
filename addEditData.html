@@ -41,6 +41,7 @@
                     <li>factoids now work</li>
                     <li>If I mention a new person in a factoid, I'm prompted to record it in the people db</li>
                     <li>automatic WikidataID for person_name works well</li>
+                    <li>graph visualisation is messy, attempting to show entities, factoids, and relationships (so a kitchen sink approach to networks/knowledge/whatever), but it allowed testing the endpoints and mapping the json in a decent way for d3.js viz</li>
                   </ul>
                 </p>
             </p>
@@ -50,6 +51,7 @@
               <li><b>Data modelling questions</b>: relationships / factoids /  both (i.e. now there are relationships between pepole-activity-work-place + factoids)?</li>
               <li>theoretically, I could easily implement Geonames identifiers, fetching also country/lat/long (but it requires an account, and I don't want to expose my username on Github for long term; hence, not working right now)</li>
               <li>fetching <b>RISM identifiers</b>: is more complicated, it is possible to fetch MARC XML and then parse, apparently the API should give also JSON-LD but it is not so clear - but there are also ambiguities about names, etc. which could be problematic with automatic fetch and we would need to implement more controls...</li>
+              <li>not a problem, but probably consider whether to reduce the alerts (and what to keep in console, what in alerts)</li>
             </ul>
             <h5>NEXT ON CHIARA TODO (TOTRY...):</h5>
             <ul>

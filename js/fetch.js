@@ -24,7 +24,7 @@ function fetchEntityData(entity, name) {
         return;
     }
 
-    fetch(`https://script.google.com/macros/s/AKfycbyiWuECCOa4UvjCen7jDNFC-VKQ4Zcv8NAAwJWVVOCLaKHFCLLUj1ezCvp1W5Avov3b1Q/exec?action=get&${queryParam}=${encodeURIComponent(name)}`, {
+    fetch(`https://script.google.com/macros/s/AKfycbyBBRlu5qk8SgG-QJhAhriKSLwLh7HJ4DH5KmUyLc2aggftNvHyB3LOKNqQC0CM2cNB3w/exec?action=get&${queryParam}=${encodeURIComponent(name)}`, {
         method: "GET"
     })
         .then(response => response.json())
